@@ -91,7 +91,7 @@ jobs:
           name: macos-latest-10
           path: artifact/darwin-10
         working-directory: '${{env.working-directory}}'
-        - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v1
         with:
           name: windows-latest-12
           path: artifact/win32-12
@@ -106,6 +106,7 @@ jobs:
           echo "artifacts" && ls artifact
           mv index.js package.json artifact/
           cd artifact && npm pack | xargs -I '{}' mv {} ./grpc_node.tgz
+        working-directory: '${{env.working-directory}}'
       - uses: actions/upload-artifact@v1
         with:
           name: grpc_node.tgz
