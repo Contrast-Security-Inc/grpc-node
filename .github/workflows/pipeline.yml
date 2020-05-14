@@ -38,7 +38,7 @@ jobs:
         with:
           name: ${{ matrix.platform }}-${{ matrix.node }}
           path: '${{env.working-directory}}/build/Release/grpc_node.node'
-        # if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
 
   build-and-test-linux:
     strategy:
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-16.04
 
   artifact:
-    # if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     needs: [ build-and-test, build-and-test-linux ]
     runs-on: ubuntu-latest
     name: Building artifact
