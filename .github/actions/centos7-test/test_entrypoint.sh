@@ -3,9 +3,8 @@
 NODE_VERSION=$1
 curl -sL https://rpm.nodesource.com/setup_$NODE_VERSION.x | bash -
 
-yum install -y nodejs make gcc-c++
+yum install -y nodejs make gcc-c++ git
 
 cd packages/grpc-native-core
-pwd
 npm run prepack
 npm run coverage

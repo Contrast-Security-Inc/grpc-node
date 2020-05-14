@@ -17,7 +17,7 @@ jobs:
         platform: [ macos-latest, windows-latest ]
     runs-on: ${{ matrix.platform }}
     env:
-      working_directory: ./packages/grpc-native-core
+      working-directory: ./packages/grpc-native-core
 
     steps:
       - uses: actions/checkout@v2
@@ -25,10 +25,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - run: pwd
-      - run: npm run prepack
-      - run: npm run coverage
+      - name: prepack
+        working-directory: '${{env.working-directory}}'
+        run: npm run prepack
+      - name: test
+        working-directory: '${{env.working-directory}}'
+        run: npm run coverage
       - uses: actions/upload-artifact@v1
+        working-directory: '${{env.working-directory}}'
         with:
           name: ${{ matrix.platform }}-${{ matrix.node }}
           path: build/Release/grpc_node.node
@@ -51,10 +55,13 @@ jobs:
     runs-on: ubuntu-16.04
 
   artifact:
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master'
     needs: [ build-and-test, build-and-test-linux ]
     runs-on: ubuntu-latest
     name: Building artifact
+    env:
+      working-directory: ./packages/grpc-native-core
+
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -63,30 +70,37 @@ jobs:
           registry-url: https://registry.npmjs.org/
       # download all of the built artifacts.
       - run: mkdir artifact
+        working-directory: '${{env.working-directory}}'
       - uses: actions/download-artifact@v1
         with:
           name: linux-12
           path: artifact/linux-12
+        working-directory: '${{env.working-directory}}'
       - uses: actions/download-artifact@v1
         with:
           name: linux-10
           path: artifact/linux-10
+        working-directory: '${{env.working-directory}}'
       - uses: actions/download-artifact@v1
         with:
           name: macos-latest-12
           path: artifact/darwin-12
+        working-directory: '${{env.working-directory}}'
       - uses: actions/download-artifact@v1
         with:
           name: macos-latest-10
           path: artifact/darwin-10
-      - uses: actions/download-artifact@v1
+        working-directory: '${{env.working-directory}}'
+        - uses: actions/download-artifact@v1
         with:
           name: windows-latest-12
           path: artifact/win32-12
+        working-directory: '${{env.working-directory}}'
       - uses: actions/download-artifact@v1
         with:
           name: windows-latest-10
           path: artifact/win32-10
+        working-directory: '${{env.working-directory}}'
       - name: pack artifact
         run: |
           echo "artifacts" && ls artifact
@@ -96,11 +110,13 @@ jobs:
         with:
           name: grpc_node.tgz
           path: artifact/grpc_node.tgz
+        working-directory: '${{env.working-directory}}'
         # upload the un-tar'd version
       - uses: actions/upload-artifact@v1
         with:
           name: grpc_node
           path: artifact
+        working-directory: '${{env.working-directory}}'
 
   artifact-test:
     if: github.ref == 'refs/heads/master'
