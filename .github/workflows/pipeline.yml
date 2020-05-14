@@ -107,7 +107,6 @@ jobs:
         with:
           name: grpc_node
           path: artifact
-        working-directory: '${{env.working-directory}}'
 
   artifact-test:
     if: github.ref == 'refs/heads/master'
