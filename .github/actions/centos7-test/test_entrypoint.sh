@@ -6,5 +6,6 @@ curl -sL https://rpm.nodesource.com/setup_$NODE_VERSION.x | bash -
 yum install -y nodejs make gcc-c++
 
 cd packages/grpc-native-core
+pwd
 npm run prepack
 npm run coverage

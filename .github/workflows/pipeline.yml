@@ -10,20 +10,22 @@ on:
 
 jobs:
   build-and-test:
+    name: ${{ matrix.platform }} Node ${{ matrix.node }} build/test
     strategy:
       matrix:
         node: [ 12, 10 ]
         platform: [ macos-latest, windows-latest ]
     runs-on: ${{ matrix.platform }}
-    name: ${{ matrix.platform }} Node ${{ matrix.node }} build/test
     env:
       working_directory: ./packages/grpc-native-core
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
+      - run: pwd
       - run: npm run prepack
       - run: npm run coverage
       - uses: actions/upload-artifact@v1
