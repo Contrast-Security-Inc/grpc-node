@@ -34,7 +34,7 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.platform }}-${{ matrix.node }}
-          path: build/Release/grpc_node.node
+          path: '${{env-working-directory}}/build/Release/grpc_node.node'
         if: github.ref == 'refs/heads/master'
 
   build-and-test-linux:
