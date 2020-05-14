@@ -25,9 +25,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
+      - name: git submodules
+        working-directory: '${{env.working-directory}}'
+        run: git submodule update --init --recursive
       - name: prepack
         working-directory: '${{env.working-directory}}'
-        run: npm run prepack
+        run: npm install --unsafe-perm
       - name: test
         working-directory: '${{env.working-directory}}'
         run: npm run coverage
@@ -35,7 +38,7 @@ jobs:
         with:
           name: ${{ matrix.platform }}-${{ matrix.node }}
           path: '${{env.working-directory}}/build/Release/grpc_node.node'
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
 
   build-and-test-linux:
     strategy:

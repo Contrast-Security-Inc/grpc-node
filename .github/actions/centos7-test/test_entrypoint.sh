@@ -8,5 +8,6 @@ yum -y install  git2u-all
 yum install -y nodejs make gcc-c++
 
 cd packages/grpc-native-core
-npm run prepack
+git submodule update --init --recursive
+npm install --unsafe-perm
 npm run coverage
